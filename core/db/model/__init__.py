@@ -1,5 +1,5 @@
 from .notification import NotificationModel
 
 __all__ = [
-    "Notification",
+    "NotificationModel",
 ]

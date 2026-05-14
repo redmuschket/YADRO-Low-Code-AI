@@ -3,7 +3,7 @@ from flask import g, jsonify
 from core import logger
 from core.exception import *
 
-logger = logger.getLogger(__name__)
+logger = logger.get_logger(__name__)
 
 def transactional(func):
     """

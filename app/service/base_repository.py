@@ -2,7 +2,7 @@ import logging
 from typing import TypeVar
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import UnmappedInstanceError
-from core.exceptions import RepositoryInputError, ServiceRepositoryError
+from core.exception import RepositoryInputError, ServiceRepositoryError
 
 logger = logging.getLogger(__name__)
 ModelType = TypeVar("ModelType")

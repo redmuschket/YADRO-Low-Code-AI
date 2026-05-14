@@ -50,8 +50,9 @@ class SyncDB:
     def run_migrations(self):
         """Apply Alembic migrations."""
         try:
-            alembic_cfg = AlembicConfig(str(self.config.alembic_ini_path))
-            logger.info(f"Way to alembic.ini: {alembic_ini_path}")
+            alembic_ini_path = self.config.alembic_ini_path
+            alembic_cfg = AlembicConfig(str(alembic_ini_path ))
+            logger.info(f"Way to alembic.ini: {alembic_ini_path }")
             alembic_cfg.set_main_option('sqlalchemy.url', self.config.sync_database_url)
 
             command.upgrade(alembic_cfg, "head")

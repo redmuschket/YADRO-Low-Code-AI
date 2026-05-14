@@ -1,10 +1,10 @@
 from functools import wraps
 from flask import jsonify
-import logging
+from core import logger
 from pydantic import ValidationError as PydanticValidationError
-from core.exceptions import *
+from core.exception import *
 
-logger = logging.getLogger(__name__)
+logger = logger.get_logger(__name__)
 
 
 def handle_exceptions(func):

@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, DateTime, Text, Enum as SAEnum
 from sqlalchemy.sql import func
-from sqlalchemy.dialects.postgresql import JSON
+from sqlalchemy.dialects.postgresql import UUID, JSON
 
 from core.enum.notification_status import NotificationStatus
 from core.enum.notification_type import NotificationType

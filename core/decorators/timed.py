@@ -2,7 +2,7 @@ import time
 from core import logger
 from functools import wraps
 
-logger = logger.getLogger(__name__)
+logger = logger.get_logger(__name__)
 
 
 def timed(func):
