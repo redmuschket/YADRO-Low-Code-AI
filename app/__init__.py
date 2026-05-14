@@ -5,8 +5,10 @@ import os
 from core import config
 from core.db.async_db import AsyncDB
 from core.db.sync_db import SyncDB
+from core.db.model import *
 from app.http.middeleware import register_all_middleware
 from app.http.route.notification import notification_bp
+
 
 logger = logger.get_logger(__name__)
 

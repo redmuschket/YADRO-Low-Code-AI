@@ -6,7 +6,6 @@ from alembic import command
 from alembic.config import Config as AlembicConfig
 from core import logger
 from core.db.config_db import ConfigDB
-import core.db.model
 
 logger = logger.get_logger(__name__)
 

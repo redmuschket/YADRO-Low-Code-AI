@@ -6,7 +6,6 @@ from core import logger
 from core.db.config_db import ConfigDB
 
 logger = logger.get_logger(__name__)
-Base = declarative_base()
 
 
 class AsyncDB:
