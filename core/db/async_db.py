@@ -3,6 +3,7 @@ from sqlalchemy.orm import declarative_base
 from typing import AsyncGenerator
 
 from core import logger
+from core.exception import *
 from core.db.config_db import ConfigDB
 
 logger = logger.get_logger(__name__)
@@ -52,10 +53,9 @@ class AsyncDB:
         async with self._async_session_local() as session:
             try:
                 yield session
-                await session.commit()
             except Exception:
-                await session.rollback()
-                raise
+                logger.error(f"Session error: {e}")
+                raise DatabaseSessionError("Session failed") from e
             finally:
                 try:
                     await session.close()
