@@ -1,4 +1,13 @@
-FROM ubuntu:latest
-LABEL authors="popbo"
+FROM python:3.11-slim
 
-ENTRYPOINT ["top", "-b"]
+WORKDIR /app
+
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+RUN gunicorn --version
+RUN celery --version
+
+COPY . .
+
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "wsgi:app"]

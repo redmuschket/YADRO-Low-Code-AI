@@ -45,16 +45,6 @@ class SyncDB:
             logger.critical(f"Synchronous DATABASE connection error: {e}")
             raise
 
-    @staticmethod
-    def _run_migrations():
-        """Apply migrations Alembic."""
-        try:
-            alembic_cfg = AlembicConfig("alembic.ini")
-            command.upgrade(alembic_cfg, "head")
-            logger.info("Alembic migrations applied")
-        except Exception as e:
-            logger.error(f"Migration application error: {e}")
-            raise
 
     def run_migrations(self):
         """Apply Alembic migrations."""

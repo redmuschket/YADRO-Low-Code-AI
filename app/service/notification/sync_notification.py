@@ -1,3 +1,6 @@
+from app.service.notification.sync_repository import SyncNotificationRepository
 
 class SyncNotificationService:
-    pass
+
+    def __init__(self, repository: SyncNotificationRepository):
+        self.repository = repository

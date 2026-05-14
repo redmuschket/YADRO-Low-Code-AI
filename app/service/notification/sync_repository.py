@@ -1,3 +1,6 @@
+from sqlalchemy.orm import Session
 
 class SyncNotificationRepository:
-    pass
+
+    def __init__(self, db_session: Session):
+        pass
