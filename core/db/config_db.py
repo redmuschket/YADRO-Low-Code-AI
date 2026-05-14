@@ -89,14 +89,29 @@ class ConfigDB:
     def _build_session_kwargs(self, is_async: bool = True) -> dict[str, Any]:
         """Parameters for creating an SQLAlchemy session"""
         db_config = self.yaml_config
-
         kwargs = {
             "expire_on_commit": bool(db_config.get('expire_on_commit', True)),
             "autoflush": bool(db_config.get('autoflush', True)),
         }
-
         if is_async:
             kwargs["autocommit"] = bool(db_config.get('autocommit', False))
             kwargs["future"] = bool(db_config.get('future', True))
-
         return kwargs
+
+    def get_safe_url(self, url: str) -> str:
+        """Masks the password in the URL."""
+        if self.password:
+            return url.replace(
+                urllib.parse.quote_plus(self.password), '***'
+            ).replace(self.password, '***')
+        return url
+
+    @property
+    def safe_async_url(self) -> str:
+        """Secure asynchronous URL (without password)."""
+        return self.get_safe_url(self.async_database_url)
+
+    @property
+    def safe_sync_url(self) -> str:
+        """Secure synchronous URL (without password)."""
+        return self.get_safe_url(self.sync_database_url)
