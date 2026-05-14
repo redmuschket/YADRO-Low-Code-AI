@@ -65,8 +65,16 @@ class LoggerConfig:
 
     def get_system_log_path(self) -> Path:
         """The full path to the system log file."""
-        return self.log_dir / self.file_system
+        if isinstance(self.logs_dir, str):
+            log_dir = Path(self.logs_dir)
+        else:
+            log_dir = self.logs_dir
+        return log_dir / self.file_system
 
     def get_user_log_path(self) -> Path:
         """The full path to the user's log file."""
-        return self.log_dir / self.file_user
+        if isinstance(self.logs_dir, str):
+            log_dir = Path(self.logs_dir)
+        else:
+            log_dir = self.logs_dir
+        return log_dir / self.file_user

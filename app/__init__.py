@@ -1,9 +1,11 @@
 from core import logger
 from flask import Flask
+import os
 
 from core import config
-from core.db import AsyncDB, SyncDB
-from app.http.middleware import register_all_middleware
+from core.db.async_db import AsyncDB
+from core.db.sync_db import SyncDB
+from app.http.middeleware import register_all_middleware
 from app.http.route import notification
 
 logger = logger.get_logger(__name__)

@@ -8,6 +8,6 @@ def get_notification_repo(db_session: Session) -> SyncNotificationRepository:
     return SyncNotificationRepository(db_session)
 
 
-def get_notification_service(db_session: Session) -> NotificationService:
+def get_notification_service(db_session: Session) -> SyncNotificationService:
     """Creates a notification service by implementing a repository."""
-    return NotificationService(repository=get_notification_repo(db_session))
+    return SyncNotificationService(repository=get_notification_repo(db_session))

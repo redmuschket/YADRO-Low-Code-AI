@@ -9,7 +9,7 @@ logger = logger.get_logger(__name__)
 Base = declarative_base()
 
 
-class DB:
+class AsyncDB:
     def __init__(self, config_db: ConfigDB):
         self.config = config_db
         self._engine = None

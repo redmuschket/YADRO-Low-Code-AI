@@ -34,10 +34,14 @@ class Logger:
             return
 
         # Creating a folder of logs
-        log_dir = self.config.path_dir
+        log_dir = self.config.logs_dir
+        if isinstance(log_dir, str):
+            log_dir = Path(log_dir)
         log_dir.mkdir(exist_ok=True, parents=True)
 
         formatter = logging.Formatter(self.config.system_format)
+
+        root_logger = logging.getLogger()
 
         def make_handler(file_path: Path, level: int, fmt_str: str) -> RotatingFileHandler:
             """Create a rotating file handler with specified level."""
