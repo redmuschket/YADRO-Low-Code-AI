@@ -46,10 +46,6 @@ class LoggerConfig:
         self.root_level = self._level_to_int(self.root_level_str)
         self.werkzeug_level = self._level_to_int(self.werkzeug_level_str)
 
-        # Creating a folder of logs
-        self.path_dir = Path(self.logs_dir)
-        self.path_dir.mkdir(exist_ok=True, parents=True)
-
     @staticmethod
     def _level_to_int(level_str: str) -> int:
         """Converts the string logging level to the logging constant."""
