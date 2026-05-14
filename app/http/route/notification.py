@@ -1,11 +1,13 @@
 from flask import Blueprint
 
-notification_bp = Blueprint('notification', __name__, url_prefix='/notifications')
+from core.decorators import *
+from app.http.controllers.notification import NotificationController
 
-@notification_bp.route('/', methods=['GET'])
-def get_notifications():
-    return {"message": "Notifications list"}, 200
+notification_bp = Blueprint('notification', __name__, url_prefix='/api/v1/notifications')
+controller = NotificationController()
 
-@notification_bp.route('/<int:notification_id>', methods=['GET'])
-def get_notification(notification_id):
-    return {"message": f"Notification {notification_id}"}, 200
+notification_bp.add_url_rule(
+    '/', 'create_notification',
+    view_func=timed(handle_exceptions(transactional(controller.create_notification))),
+    methods=['POST']
+)
