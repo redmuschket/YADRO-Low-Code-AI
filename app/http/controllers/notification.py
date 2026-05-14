@@ -9,6 +9,7 @@ from app.http.response_model.notification import NotificationCreateResponse
 from core.enum.notification_status import NotificationStatus
 from core.http_status import HttpStatus, HTTP_202_ACCEPTED
 from core import logger
+from workers.tasks.notifications import send_notification_task
 
 logger_user = logger.get_logger('user')
 logger_system = logger.get_logger(__name__)
@@ -31,7 +32,11 @@ class NotificationController:
 
         service: SyncNotificationService = g.notification_service
         notification: NotificationCreateResponse = service.create_notification_by_request(request=data)
+
         notification.status = NotificationStatus.QUEUED
+
+        send_notification_task.delay(str(notification.id))
+
         logger_user.info(f"Notification {notification.id} queued for sending")
 
         return jsonify(notification.model_dump()), HTTP_202_ACCEPTED
