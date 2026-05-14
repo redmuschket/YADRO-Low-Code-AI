@@ -4,6 +4,7 @@ from .timed import *
 
 __all__ = [
     'timed',
-    'transactional',
+    'sync_transactional',
+    'async_transactional'
     'handle_exceptions'
 ]

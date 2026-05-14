@@ -5,7 +5,7 @@ from core.exception import *
 
 logger = logger.get_logger(__name__)
 
-def transactional(func):
+def sync_transactional(func):
     """
     A decorator for routes that need a transaction.
     On success, it automatically commits sessions from g.
@@ -23,4 +23,20 @@ def transactional(func):
                 g.db_session.rollback()
                 logger.error(f"Error, the transaction was canceled: {e}")
             raise TransactionError(e)
+    return wrapper
+
+
+def async_transactional(func):
+    @wraps(func)
+    async def wrapper(*args, **kwargs):
+        session = kwargs.pop('session', None)
+        if session is None:
+            raise ValueError("Session is required")
+        try:
+            result = await func(session=session, *args, **kwargs)
+            await session.commit()
+            return result
+        except Exception:
+            await session.rollback()
+            raise
     return wrapper
