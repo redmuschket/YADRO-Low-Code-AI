@@ -1,6 +1,7 @@
-from sqlalchemy.orm import Session
+from app.service.base_sync_repository import BaseSyncRepository
+from core.db.model.notification import NotificationModel
 
-class SyncNotificationRepository:
+class SyncNotificationRepository(BaseSyncRepository):
 
-    def __init__(self, db_session: Session):
-        pass
+    def save(self, notification:NotificationModel):
+        return self._save_entity(notification)
