@@ -20,6 +20,10 @@ class Config:
             self.logger = self._setup_logger()
             self.db_config = self._setup_db_config()
 
+    @property
+    def logger_config(self) -> LoggerConfig:
+        return LoggerConfig(yaml_config=self.__config.get("log", {}))
+
     @staticmethod
     def safe_reload_env(env_file: str) -> bool:
         try:
@@ -35,8 +39,7 @@ class Config:
         return self.__config["storage"]["storage_dir"]
 
     def _setup_logger(self) -> Logger:
-        logger_config = LoggerConfig(yaml_config=self.__config.get("log", {}))
-        logger = Logger.init_logger(logger_config)
+        logger = Logger.init_logger(self.logger_config)
         return logger
 
     def _setup_db_config(self):

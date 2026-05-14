@@ -18,7 +18,7 @@ async_db_instance = None
 
 def register_blueprints(app: Flask):
     app.register_blueprint(notification_bp)
-    logger.debug("Blueprint'ы registered")
+    logger.debug("Blueprint's registered")
 
 def init_sync_db(app: Flask):
     global sync_db_instance
