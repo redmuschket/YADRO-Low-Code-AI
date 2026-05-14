@@ -1,5 +1,6 @@
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, Session
+import os
 
 from alembic import command
 from alembic.config import Config as AlembicConfig
@@ -39,7 +40,8 @@ class SyncDB:
 
             logger.info("The synchronous database is connected")
 
-            self.run_migrations()
+            if os.getenv('RUN_MIGRATIONS', 'false').lower() == 'true':
+                self.run_migrations()
 
         except Exception as e:
             logger.critical(f"Synchronous DATABASE connection error: {e}")

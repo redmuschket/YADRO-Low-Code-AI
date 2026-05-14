@@ -6,7 +6,7 @@ from core import config
 from core.db.async_db import AsyncDB
 from core.db.sync_db import SyncDB
 from app.http.middeleware import register_all_middleware
-from app.http.route import notification
+from app.http.route.notification import notification_bp
 
 logger = logger.get_logger(__name__)
 
@@ -15,17 +15,15 @@ async_db_instance = None
 
 
 def register_blueprints(app: Flask):
-    app.register_blueprint(notification)
+    app.register_blueprint(notification_bp)
     logger.debug("Blueprint'ы registered")
 
 def init_sync_db(app: Flask):
     global sync_db_instance
 
-    run_migrations = os.getenv('RUN_MIGRATIONS', 'false').lower() == 'true'
-
     sync_db_instance = SyncDB(config.db_config)
     try:
-        sync_db_instance.connect(run_migrations=run_migrations)
+        sync_db_instance.connect()
         app.extensions['sync_db'] = sync_db_instance
         logger.info("The synchronous database object has been created (connection in workshops)")
         logger.info("The database is connected")
