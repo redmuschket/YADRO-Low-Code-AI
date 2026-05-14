@@ -25,15 +25,34 @@ database:
   protocol: postgresql+asyncpg
 
 log:
+  # A directory for storing log files (relative or absolute path).
+  # Will be created automatically at the first launch if it does not exist.
   logs_dir: "./logs"
+  # Application operation events, exceptions, starts/stops are written here.
   file_system: "system.log"
+  # It can contain business events: notification created, sent, validation error.
   file_user: "user.log"
+  # The maximum size of the log file in bytes (10 MB).
+  # If exceeded, rotation occurs (a new file is created, the old one is renamed).
   max_bytes: 10485760
+  # The number of log files stored during rotation.
   backup_count: 5
+  # Encoding of text in log files.
   encoding: "utf-8"
+  # The message format for the system log.
+  # %(asctime)s - time
+  # %(name)s - name of the logger
+  # %(levelname)s - level
+  # %(message)s - text.
   system_format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-  user_format: "%(asctime)s - %(message)s"
+  # Message format for the user log.
+  user_format: "%(asctime)s - %(levelname)s - %(message)s"
+  # The logging level for writing to files (DEBUG, INFO, WARNING, ERROR, CRITICAL).
+  # Messages below this level are not included in the files..
   file_level: "INFO"
+  # The logging level for output to the console (stderr/stdout).
   console_level: "DEBUG"
+  # The root logging level for all loggers.
   root_level: "DEBUG"
-  werkzeug_level: "INFO"
+  # Logging level for the Werkzeug library (Flask is used for HTTP requests).
+  werkzeug_level: "ERROR"
