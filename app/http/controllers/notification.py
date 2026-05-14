@@ -6,6 +6,7 @@ from app.service.notification.sync_notification import SyncNotificationService
 from app.http.request_model.notification import NotificationCreateRequest
 from app.http.response_model.notification import NotificationCreateResponse
 from core.enum.notification_status import NotificationStatus
+from core.http_status import HttpStatus, HTTP_202_ACCEPTED
 from core import logger
 
 logger_user = logger.get_logger('user')
@@ -15,7 +16,7 @@ logger_system = logger.get_logger(__name__)
 class NotificationController:
     """Handles HTTP requests and orchestrates service calls."""
 
-    def create_notification(self) -> tuple[NotificationCreateResponse, int]:
+    def create_notification(self) -> tuple[NotificationCreateResponse, HttpStatus]:
         """
         Process notification creation request.
 
@@ -25,7 +26,7 @@ class NotificationController:
         4. Send it to Celery
         3. Return response with notification ID
         """
-        data = NotificationCreate(**request.json)
+        data = NotificationCreateRequest(**request.json)
 
         service: SyncNotificationService = g.notification_service
         notification: NotificationCreateResponse = service.create_notification_by_request(request=data)
@@ -33,7 +34,7 @@ class NotificationController:
         send_notification_task.delay(str(notification.id))
         logger_user.info(f"Notification {notification.id} queued for sending")
 
-        return notification, 202
+        return notification, HTTP_202_ACCEPTED
 
     async def get_notification_status(
             self,
