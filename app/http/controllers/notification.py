@@ -31,7 +31,7 @@ class NotificationController:
 
         service: SyncNotificationService = g.notification_service
         notification: NotificationCreateResponse = service.create_notification_by_request(request=data)
-
+        notification.status = NotificationStatus.QUEUED
         logger_user.info(f"Notification {notification.id} queued for sending")
 
         return jsonify(notification.model_dump()), HTTP_202_ACCEPTED
