@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Dict, Any
+from typing import Any
 from sqlalchemy.pool import NullPool
 import urllib.parse
 import os
@@ -7,7 +7,7 @@ import os
 
 @dataclass
 class ConfigDB:
-    yaml_config: Dict[str, Any] = field(default_factory=dict)
+    yaml_config: dict[str, Any] = field(default_factory=dict)
 
     db_name: str = field(default_factory=lambda: os.getenv('POSTGRES_DB', ''))
     host: str = field(default_factory=lambda: os.getenv('POSTGRES_HOST', 'postgres'))
@@ -16,33 +16,54 @@ class ConfigDB:
     password: str = field(default_factory=lambda: os.getenv('POSTGRES_PASSWORD', ''))
 
     @property
-    def protocol(self) -> str:
-        proto = self.yaml_config.get('protocol', "postgresql+asyncpg")
+    def async_protocol(self) -> str:
+        proto = self.yaml_config.get('async_protocol', "postgresql+asyncpg")
         return proto.replace("://", "")
 
     @property
-    def database_url(self) -> str:
+    def sync_protocol(self) -> str:
+        proto = self.yaml_config.get('sync_protocol', "postgresql")
+        return proto.replace("://", "")
+
+    @property
+    def async_database_url(self) -> str:
+        return self._build_url(self.async_protocol)
+
+    @property
+    def sync_database_url(self) -> str:
+        return self._build_url(self.sync_protocol)
+
+    def _build_url(self, protocol: str) -> str:
         """Creating an activation URL"""
         if self.username and self.password:
             user = urllib.parse.quote_plus(self.username)
             pwd = urllib.parse.quote_plus(self.password)
-            return f"{self.protocol}://{user}:{pwd}@{self.host}:{self.port}/{self.db_name}"
+            return f"{protocol}://{user}:{pwd}@{self.host}:{self.port}/{self.db_name}"
         elif self.username:
             user = urllib.parse.quote_plus(self.username)
-            return f"{self.protocol}://{user}@{self.host}:{self.port}/{self.db_name}"
+            return f"{protocol}://{user}@{self.host}:{self.port}/{self.db_name}"
         else:
-            return f"{self.protocol}://{self.host}:{self.port}/{self.db_name}"
+            return f"{protocol}://{self.host}:{self.port}/{self.db_name}"
 
     @property
-    def engine_kwargs(self) -> Dict[str, Any]:
+    def async_engine_kwargs(self) -> dict[str, Any]:
+        return self._build_engine_kwargs()
+
+    @property
+    def sync_engine_kwargs(self) -> dict[str, Any]:
+        return self._build_engine_kwargs(is_async=False)
+
+    def _build_engine_kwargs(self, is_async: bool = True) -> dict[str, Any]:
         """Parameters for creating engine SQLAlchemy"""
         # Basic settings for the engine
         engine_kwargs = {
             "echo": bool(self.yaml_config.get('echo', False)),
             "pool_pre_ping": bool(self.yaml_config.get('pre_ping', True)),
             "pool_recycle": int(self.yaml_config.get('pool_recycle', 3600)),
-            "future": bool(self.yaml_config.get('future', True)),
         }
+
+        if is_async:
+            engine_kwargs["future"] = bool(self.yaml_config.get('future', True))
 
         # Pool settings
         pool_class = self.yaml_config.get('pool_class')
@@ -58,13 +79,24 @@ class ConfigDB:
         return engine_kwargs
 
     @property
-    def session_kwargs(self) -> Dict[str, Any]:
+    def async_session_kwargs(self) -> dict[str, Any]:
+        return self._build_session_kwargs(is_async=True)
+
+    @property
+    def sync_session_kwargs(self) -> dict[str, Any]:
+        return self._build_session_kwargs(is_async=False)
+
+    def _build_session_kwargs(self, is_async: bool = True) -> dict[str, Any]:
         """Parameters for creating an SQLAlchemy session"""
         db_config = self.yaml_config
 
-        return {
+        kwargs = {
             "expire_on_commit": bool(db_config.get('expire_on_commit', True)),
-            "autocommit": bool(db_config.get('autocommit', False)),
             "autoflush": bool(db_config.get('autoflush', True)),
-            "future": bool(db_config.get('future', True)),
         }
+
+        if is_async:
+            kwargs["autocommit"] = bool(db_config.get('autocommit', False))
+            kwargs["future"] = bool(db_config.get('future', True))
+
+        return kwargs

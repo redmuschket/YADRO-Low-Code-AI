@@ -22,7 +22,8 @@ database:
   autoflush: False
   # Support for SQLAlchemy 2.x style
   future: True
-  protocol: postgresql+asyncpg
+  async_protocol: postgresql+asyncpg
+  sync_protocol: postgresql
 
 log:
   # A directory for storing log files (relative or absolute path).
