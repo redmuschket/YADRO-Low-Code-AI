@@ -10,7 +10,7 @@ from typing import Optional
 from uuid6 import UUID
 
 
-class SyncNotificationService:
+class AsyncNotificationService:
 
     def __init__(self, repository: AsyncNotificationRepository):
         self.repository = repository
