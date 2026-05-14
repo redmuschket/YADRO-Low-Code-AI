@@ -10,7 +10,7 @@ from core.logger.logger_config import LoggerConfig
 
 
 class Config:
-    USER_FILE_UUID_RESTRICTION: Set[int] = {7}
+    NOTIFICATION_UUID_VERSION: int = 7
 
     def __init__(self, yaml_path: str = "config.yaml", env_file: str = ".env"):
         self.env_path = Path(env_file)
