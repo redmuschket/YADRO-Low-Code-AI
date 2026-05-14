@@ -4,18 +4,20 @@ from sqlalchemy.dialects.postgresql import JSON
 
 from core.enum.notification_status import NotificationStatus
 from core.enum.notification_type import NotificationType
+from core.utils.generate_uuid import generate_uuid_for_notification_from_config
 from core.db.base import Base
+
 import enum
 
-class Notification(Base):
+class NotificationModel(Base):
     __tablename__ = "notifications"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=generate_uuid7)
+    id = Column(UUID(as_uuid=True), primary_key=True, default=generate_uuid_for_notification_from_config)
     type = Column(
         SAEnum(NotificationType, name='notification_type_enum', create_type=True),
         nullable=False
     )
-    recipient = Column(String, nullable=False)
+    recipient = Column(String(512), nullable=False)
     message = Column(Text, nullable=False)
     subject = Column(JSON, nullable=True)
     status = Column(

@@ -1,4 +1,4 @@
-from .notification import Notification
+from .notification import NotificationModel
 
 __all__ = [
     "Notification",
