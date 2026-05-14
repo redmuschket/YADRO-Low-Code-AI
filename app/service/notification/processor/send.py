@@ -1,8 +1,8 @@
 from core import logger
 from app.service.notification.async_notification import AsyncNotificationService
-from app.service.notification.processor.send_email import SendEmail
-from app.service.notification.processor.send_sms import SendSMS
-from app.service.notification.processor.send_telegram import SendTelegram
+from app.service.notification.processor.send_email import SendEmailProcessor
+from app.service.notification.processor.send_sms import SendSMSProcessor
+from app.service.notification.processor.send_telegram import SendTelegramProcessor
 from core.db.model.notification import NotificationModel
 from core.enum.notification_type import NotificationType
 from core.domain.notification import Notification
@@ -16,9 +16,9 @@ class SendProcessor:
 
     def __init__(self,
         service: AsyncNotificationService,
-        send_email: SendEmail,
-        send_sms: SendSMS,
-        send_telegram: SendTelegram,
+        send_email: SendEmailProcessor,
+        send_sms: SendSMSProcessor,
+        send_telegram: SendTelegramProcessor,
     ):
         self._service = service
         self._send_email = send_email
