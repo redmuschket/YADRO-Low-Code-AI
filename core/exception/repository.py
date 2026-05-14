@@ -5,19 +5,11 @@ class ServiceRepositoryError(ServiceError):
     pass
 
 class DatabaseError(ServiceRepositoryError):
-    """Ошибка базы данных"""
+    """Database error"""
     pass
 
 class TransactionError(DatabaseError):
-    """Ошибка транзакции"""
-    pass
-
-class BulkOperationError(DatabaseError):
-    """Ошибка массовых операций"""
-    pass
-
-class ServiceRepositoryError(ServiceError):
-    """Repository service level error"""
+    """Transaction error"""
     pass
 
 class RepositoryInputError(ServiceRepositoryError):
