@@ -24,6 +24,8 @@ database:
   future: True
   async_protocol: postgresql+asyncpg
   sync_protocol: postgresql
+  alembic:
+    ini_path: "f_alembic/alembic.ini"
 
 log:
   # A directory for storing log files (relative or absolute path).

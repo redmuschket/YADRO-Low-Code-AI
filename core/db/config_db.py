@@ -14,6 +14,18 @@ class ConfigDB:
     port: str = field(default_factory=lambda: os.getenv('POSTGRES_PORT', '5432'))
     username: str = field(default_factory=lambda: os.getenv('POSTGRES_USERNAME', ''))
     password: str = field(default_factory=lambda: os.getenv('POSTGRES_PASSWORD', ''))
+    run_migrations: str = field(default_factory=lambda: os.getenv('RUN_MIGRATIONS', 'False'))
+
+    @property
+    def alembic_ini_path(self) -> Path:
+        alembic_config = self.yaml_config.get('alembic', {})
+        yaml_path = alembic_config.get('ini_path', 'f_alembic/alembic.ini')
+        path = Path(yaml_path)
+        if not path.is_absolute():
+            # The root of the project: rising from core/db/config_db.py
+            project_root = Path(__file__).resolve().parent.parent.parent
+            path = project_root / path
+        return path
 
     @property
     def async_protocol(self) -> str:

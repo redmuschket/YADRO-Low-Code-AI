@@ -36,17 +36,6 @@ class DB:
                 **session_kwargs
             )
 
-            import core.db.models
-
-            try:
-                async with self._engine.begin() as conn:
-                    await conn.run_sync(Base.metadata.create_all)
-            except ConnectionRefusedError:
-                raise
-            except Exception as e:
-                logger.error(f"Error when creating tables: {type(e).__name__}")
-                raise
-
         except ConnectionRefusedError:
             raise
         except Exception as e:

@@ -20,11 +20,11 @@ logger = logging.getLogger("alembic.env")
 
 target_metadata = Base.metadata
 
-DB_USER = os.getenv("DATABASE_USERNAME", "admin")
-DB_PASS = os.getenv("DATABASE_PASSWORD", "password")
-DB_HOST = os.getenv("DATABASE_HOST", "postgres")
-DB_PORT = os.getenv("DATABASE_PORT", "5432")
-DB_NAME = os.getenv("DATABASE_NAME", "formulist")
+DB_USER = os.getenv("POSTGRES_USERNAME", "admin")
+DB_PASS = os.getenv("POSTGRES_PASSWORD", "password")
+DB_HOST = os.getenv("POSTGRES_HOST", "postgres")
+DB_PORT = os.getenv("POSTGRES_PORT", "5432")
+DB_NAME = os.getenv("POSTGRES_DB", "notification")
 
 DATABASE_URL = (
     f"postgresql+psycopg2://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
@@ -34,7 +34,7 @@ config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
 
 def render_item(type_, obj, autogen_context):
-    """Функция для автоматического добавления импортов кастомных типов."""
+    """A function for automatically adding custom type imports."""
     if type_ == "type" and obj.__class__.__module__.startswith("core."):
         autogen_context.imports.add(f"import {obj.__class__.__module__.split('.')[0]}")
     return False
