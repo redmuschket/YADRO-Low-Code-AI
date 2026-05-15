@@ -9,6 +9,8 @@ from alembic import op
 import sqlalchemy as sa
 from sqlalchemy.dialects.postgresql import UUID, JSON
 
+from core.enum.notification_status import NotificationStatus
+from core.enum.notification_type import NotificationType
 
 # revision identifiers, used by Alembic.
 revision = '4c92ddcd6746'
@@ -16,7 +18,21 @@ down_revision = None
 branch_labels = None
 depends_on = None
 
+notification_status_enum = sa.Enum(
+    NotificationStatus,
+    name='notification_status_enum',
+    create_type=True
+)
+notification_type_enum = sa.Enum(
+    NotificationType,
+    name='notification_type_enum',
+    create_type=True
+)
+
 def upgrade():
+    notification_status_enum.create(op.get_bind(), checkfirst=True)
+    notification_type_enum.create(op.get_bind(), checkfirst=True)
+
     op.create_table(
         'notifications',
         sa.Column('id', UUID(as_uuid=True), primary_key=True),
@@ -32,3 +48,6 @@ def upgrade():
 
 def downgrade():
     op.drop_table('notifications')
+
+    notification_status_enum.drop(op.get_bind(), checkfirst=True)
+    notification_type_enum.drop(op.get_bind(), checkfirst=True)

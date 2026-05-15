@@ -14,14 +14,18 @@ class NotificationModel(Base):
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=generate_uuid_for_notification_from_config)
     type = Column(
-        SAEnum(NotificationType, name='notification_type_enum', create_type=True),
+        SAEnum(NotificationType,
+               name='notification_type_enum',
+               create_type=True),
         nullable=False
     )
     recipient = Column(String(512), nullable=False)
     message = Column(Text, nullable=False)
     subject = Column(JSON, nullable=True)
     status = Column(
-        SAEnum(NotificationStatus, name='notification_status_enum', create_type=True),
+        SAEnum(NotificationStatus,
+               name='notification_status_enum',
+               create_type=True),
         default=NotificationStatus.PENDING,
         nullable=False
     )
