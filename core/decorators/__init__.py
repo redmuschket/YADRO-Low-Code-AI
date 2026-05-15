@@ -5,6 +5,6 @@ from .timed import *
 __all__ = [
     'timed',
     'sync_transactional',
-    'async_transactional'
+    'async_transactional',
     'handle_exceptions'
 ]
