@@ -3,7 +3,7 @@ from core.db.model.notification import NotificationModel
 from core.enum.notification_status import NotificationStatus
 from app.http.request_model.notification import NotificationCreateRequest
 from core.data_mapper.notification import NotificationMapper
-from app.http.response_model.notification import NotificationCreateResponse
+from app.http.response_model.notification import NotificationResponse
 from core.domain.notification import Notification
 from core.exception import *
 
