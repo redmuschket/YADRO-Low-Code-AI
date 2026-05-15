@@ -14,6 +14,7 @@ logger = logger.get_logger(__name__)
 
 sync_db_instance = None
 async_db_instance = None
+_async_db_initialized = False
 
 
 def register_blueprints(app: Flask):
@@ -50,6 +51,21 @@ def get_async_db():
         logger.error("Asynchronous database is not initialized")
         raise RuntimeError("Asynchronous database is not initialized")
     return async_db_instance
+
+
+async def ensure_async_db_initialized():
+    global async_db_instance, _async_db_initialized
+    if async_db_instance is None:
+        raise RuntimeError("AsyncDB instance not created")
+
+    if not _async_db_initialized:
+        try:
+            await async_db_instance.init_db_client()
+            _async_db_initialized = True
+            logger.info("Asynchronous database client initialized")
+        except Exception as e:
+            logger.critical(f"Error initializing async database client: {e}")
+            raise
 
 def create_app():
     global async_db_instance
