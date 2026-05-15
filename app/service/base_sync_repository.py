@@ -2,7 +2,7 @@ from core import logger
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm.exc import UnmappedInstanceError
-from core.db.repository.base import BaseRepository, ModelType
+from app.service.base_repository import BaseRepository, ModelType
 from core.exception import RepositoryInputError
 
 logger = logger.get_logger(__name__)

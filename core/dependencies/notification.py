@@ -1,40 +1,48 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.service.notification.sync_notification import SyncNotificationService
-from app.service.notification.sync_repository import SyncNotificationRepository
-from app.service.notification.async_repository import AsyncNotificationRepository
-from app.service.notification.async_notification import AsyncNotificationService
-from app.service.notification.processor.send_email import SendEmailProcessor
-from app.service.notification.processor.send_sms import SendSMSProcessor
-from app.service.notification.processor.send_telegram import SendTelegramProcessor
-from app.service.notification.processor.send import SendProcessor
 
-def get_sync_notification_repository(db_session: Session) -> SyncNotificationRepository:
+
+def get_sync_notification_repository(db_session: Session):
     """Creates a sync notification repository linked to the session."""
+    from app.service.notification.sync_repository import SyncNotificationRepository
     return SyncNotificationRepository(db_session)
 
-def get_sync_notification_service(db_session: Session) -> SyncNotificationService:
+
+def get_sync_notification_service(db_session: Session):
     """Creates a sync notification service by implementing a repository."""
+    from app.service.notification.sync_notification import SyncNotificationService
     return SyncNotificationService(repository=get_sync_notification_repository(db_session))
 
-def get_async_notification_repository(db_session: AsyncSession) -> AsyncNotificationRepository:
+
+def get_async_notification_repository(db_session: AsyncSession):
     """Creates async notification repository linked to the session."""
+    from app.service.notification.async_repository import AsyncNotificationRepository
     return AsyncNotificationRepository(db_session)
 
-def get_async_notification_service(db_session: AsyncSession) -> AsyncNotificationService:
+
+def get_async_notification_service(db_session: AsyncSession):
     """Creates async notification service by implementing a repository."""
+    from app.service.notification.async_notification import AsyncNotificationService
     return AsyncNotificationService(repository=get_async_notification_repository(db_session))
 
-def get_processor_send_email() -> SendEmailProcessor:
+
+def get_processor_send_email():
+    from app.service.notification.processor.send_email import SendEmailProcessor
     return SendEmailProcessor()
 
-def get_processor_send_sms() -> SendSMSProcessor:
+
+def get_processor_send_sms():
+    from app.service.notification.processor.send_sms import SendSMSProcessor
     return SendSMSProcessor()
 
-def get_processor_send_telegram() -> SendTelegramProcessor:
+
+def get_processor_send_telegram():
+    from app.service.notification.processor.send_telegram import SendTelegramProcessor
     return SendTelegramProcessor()
 
+
 def get_processor_notification_send(db_session: AsyncSession):
+    from app.service.notification.processor.send import SendProcessor
     return SendProcessor(
         send_sms=get_processor_send_sms(),
         send_email=get_processor_send_email(),

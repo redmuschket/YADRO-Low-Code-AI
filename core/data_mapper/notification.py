@@ -2,6 +2,8 @@ from app.http.request_model.notification import NotificationCreateRequest
 from app.http.response_model.notification import NotificationCreateResponse
 from core.db.model.notification import NotificationModel
 from core.domain.notification import Notification
+from core.enum.notification_type import NotificationType
+from core.enum.notification_status import NotificationStatus
 
 class NotificationMapper:
 
