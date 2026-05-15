@@ -7,7 +7,7 @@ from core import config
 from core.enum.notification_status import NotificationStatus
 
 
-class NotificationCreateResponse(BaseModel):
+class NotificationResponse(BaseModel):
     """The scheme for creating a notification."""
     status: NotificationStatus = Field(
         ...,

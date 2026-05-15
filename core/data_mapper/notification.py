@@ -1,5 +1,5 @@
 from app.http.request_model.notification import NotificationCreateRequest
-from app.http.response_model.notification import NotificationCreateResponse
+from app.http.response_model.notification import NotificationResponse
 from core.db.model.notification import NotificationModel
 from core.domain.notification import Notification
 from core.enum.notification_type import NotificationType
@@ -18,11 +18,19 @@ class NotificationMapper:
         )
 
     @staticmethod
-    def from_model_to_create_response(model: NotificationModel) -> NotificationCreateResponse:
-        """SQLAlchemy model -> Pydantic create response."""
-        return NotificationCreateResponse(
+    def from_model_to_response(model: NotificationModel) -> NotificationResponse:
+        """SQLAlchemy model -> Pydantic response."""
+        return NotificationResponse(
             id=model.id,
             status=model.status,
+        )
+
+    @staticmethod
+    def from_domian_to_response(domain: Notification) -> NotificationResponse:
+        """Domain object -> Pydantic response."""
+        return NotificationResponse(
+            id=domain.id,
+            status=domain.status,
         )
 
     @staticmethod
