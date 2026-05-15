@@ -11,3 +11,9 @@ notification_bp.add_url_rule(
     view_func=timed(handle_exceptions(sync_transactional(controller.create_notification))),
     methods=['POST']
 )
+
+notification_bp.add_url_rule(
+    '/<uuid:notification_id>', 'get_notification',
+    view_func=timed(handle_exceptions(controller.get_notification)),
+    methods=['GET']
+)
