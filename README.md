@@ -249,8 +249,25 @@ alembic -c f_alembic/alembic.ini upgrade head
 обновляет статус (sent или failed).
 
 ## Тестирование
-### Пример curl-запроса (PowerShell):
 
+### Unit-test
+<details> <summary><b>Linux / macOS</b></summary>
+
+```bash
+source .venv/bin/activate
+```
+</details><details> <summary><b>Windows</b></summary>
+
+```bash
+.venv\Scripts\Activate.ps1
+```
+</details>
+
+```bash
+pytest test/ -v
+```
+
+### Console
 <details> <summary><b>Linux / macOS</b></summary>
 
 ```bash
