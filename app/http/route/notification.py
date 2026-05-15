@@ -8,7 +8,7 @@ controller = NotificationController()
 
 notification_bp.add_url_rule(
     '/', 'create_notification',
-    view_func=timed(handle_exceptions(sync_transactional(controller.create_notification))),
+    view_func=timed(sync_transactional(handle_exceptions(controller.create_notification))),
     methods=['POST']
 )
 

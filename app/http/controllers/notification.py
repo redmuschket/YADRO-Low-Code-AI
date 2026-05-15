@@ -10,6 +10,7 @@ from core.enum.notification_status import NotificationStatus
 from core.http_status import HttpStatus, HTTP_202_ACCEPTED, HTTP_200_OK
 from core.domain.notification import Notification
 from core.data_mapper.notification import NotificationMapper
+from workers.tasks.notifications import send_notification_task
 from core import logger
 
 logger_user = logger.get_logger('user')
@@ -20,7 +21,6 @@ class NotificationController:
     """Handles HTTP requests and orchestrates service calls."""
 
     def create_notification(self) -> tuple[NotificationResponse, HttpStatus]:
-        from workers.tasks.notifications import send_notification_task
         """
         Process notification creation request.
 

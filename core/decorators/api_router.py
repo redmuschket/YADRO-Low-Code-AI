@@ -2,6 +2,7 @@ from functools import wraps
 from flask import jsonify
 from core import logger
 from pydantic import ValidationError as PydanticValidationError
+from sqlalchemy.exc import ProgrammingError
 from core.exception import *
 
 logger = logger.get_logger(__name__)
@@ -18,7 +19,19 @@ def handle_exceptions(func):
             return func(*args, **kwargs)
         except PydanticValidationError as e:
             logger.warning(f"Validation error in {func.__name__}: {e.errors()}")
-            return jsonify({"error": "Invalid request data", "details": e.errors()}), 422
+            clean_errors = []
+            for error in e.errors():
+                clean_error = {
+                    "type": error.get("type"),
+                    "loc": error.get("loc"),
+                    "msg": error.get("msg"),
+                    "input": error.get("input")
+                }
+                clean_errors.append(clean_error)
+            return jsonify({
+                "error": "Invalid request data",
+                "details": clean_errors
+            }), 422
         except ValidationError as e:
             logger.warning(f"Business validation failed in {func.__name__}: {str(e)}")
             return jsonify({"error": str(e)}), 400
@@ -31,6 +44,9 @@ def handle_exceptions(func):
         except NotificationServiceError as e:
             logger.error(f"Notification service error in {func.__name__}: {str(e)}")
             return jsonify({"error": str("Service temporarily unavailable")}), 503
+        except ProgrammingError as e:
+            logger.error(f"Database error in {func.__name__}: {str(e)}")
+            return jsonify({"error": "Database error"}), 500
         except TransactionError as e:
             logger.error(f"Transaction error in {func.__name__}: {str(e)}")
             return jsonify({"error": "Internal server error"}), 500

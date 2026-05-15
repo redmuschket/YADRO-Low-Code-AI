@@ -15,17 +15,7 @@ def send_notification_task(self, notification_id: UUID):
         async for session in get_db():
             try:
                 logger.info(f"Processing notification {notification_id}")
-
-                # Debug: Check if get_processor_notification_send exists
-                logger.info(f"get_processor_notification_send type: {type(get_processor_notification_send)}")
-
                 processor = get_processor_notification_send(session)
-
-                # Debug: Check what processor is
-                logger.info(f"Processor type: {type(processor)}")
-
-                if processor is None:
-                    raise ValueError("get_processor_notification_send returned None")
 
                 await processor.process(session=session, notification_id=notification_id)
                 logger.info(f"Successfully processed notification {notification_id}")

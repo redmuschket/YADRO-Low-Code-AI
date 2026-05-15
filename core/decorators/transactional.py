@@ -1,7 +1,10 @@
 from functools import wraps
 from flask import g, jsonify
+from pydantic import ValidationError as PydanticValidationError
+
 from core import logger
 from core.exception import *
+
 
 logger = logger.get_logger(__name__)
 
@@ -18,6 +21,10 @@ def sync_transactional(func):
                 g.db_session.commit()
                 logger.debug("The transaction has been successfully committed")
             return result
+        except PydanticValidationError:
+            if hasattr(g, 'db_session') and g.db_session:
+                g.db_session.rollback()
+            raise
         except Exception as e:
             if hasattr(g, 'db_session') and g.db_session:
                 g.db_session.rollback()
